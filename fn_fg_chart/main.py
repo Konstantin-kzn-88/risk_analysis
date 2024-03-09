@@ -151,7 +151,7 @@ class FN_FG_chart:
             self.ws.pictures.add(fig, name='FG', update=True, left=self.ws.range('Q5').left,
                                  top=self.ws.range('Q5').top)
             # plt.show()
-            # plt.savefig(f'fn.jpg')
+            # plt.savefig(f'fg.jpg')
 
 
 if __name__ == '__main__':
