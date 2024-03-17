@@ -4,7 +4,7 @@ from calculation_methods import calc_strait_fire, calc_tvs_explosion, calc_jet_f
 
 try:
     wb = xw.books.active
-    ws = wb.sheets['Сценарии']
+    ws = wb.sheets['Расчет']
 
 except FileNotFoundError:
     print('Файл не отрыт, либо не листа "Сценарии"')
