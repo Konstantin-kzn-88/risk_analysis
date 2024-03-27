@@ -170,8 +170,8 @@ for index in all_index_of_type_tree:
         # 1. Получим класс для расчета взрыва
         explosion_unit = calc_tvs_explosion.Explosion()
         # 2. Получим зоны классифицированные
-        zone_cls_array = explosion_unit.explosion_class_zone(2, 2, xw.Range(f'J{index - 4}').value * 1000, 45320, 7, 2)
-        zone_cls_array_2 = explosion_unit.explosion_class_zone(2, 2, xw.Range(f'J{index}').value * 1000, 45320, 7, 2)
+        zone_cls_array = explosion_unit.explosion_class_zone(3, 2, xw.Range(f'J{index - 4}').value * 1000, 45320, 7, 2)
+        zone_cls_array_2 = explosion_unit.explosion_class_zone(3, 2, xw.Range(f'J{index}').value * 1000, 45320, 7, 2)
         # 3. Запишем решение
         xw.Range(f'T{index - 4}').value = zone_cls_array[1]
         xw.Range(f'U{index - 4}').value = zone_cls_array[2]
@@ -272,7 +272,7 @@ for index in all_index_of_type_tree:
         # 1. Получим класс для расчета взрыва
         explosion_unit = calc_tvs_explosion.Explosion()
         # 2. Получим зоны классифицированные
-        zone_cls_array = explosion_unit.explosion_class_zone(2, 2, xw.Range(f'J{index - 4}').value * 1000, 45320, 7, 2)
+        zone_cls_array = explosion_unit.explosion_class_zone(3, 2, xw.Range(f'J{index - 4}').value * 1000, 45320, 7, 2)
         # 3. Запишем решение
         xw.Range(f'T{index - 4}').value = zone_cls_array[1]
         xw.Range(f'U{index - 4}').value = zone_cls_array[2]
@@ -383,7 +383,7 @@ for index in all_index_of_type_tree:
         # 1. Получим класс для расчета взрыва
         explosion_unit = calc_tvs_explosion.Explosion()
         # 2. Получим зоны классифицированные
-        zone_cls_array = explosion_unit.explosion_class_zone(2, 2, xw.Range(f'J{index - 4}').value * 1000, 45320, 7, 2)
+        zone_cls_array = explosion_unit.explosion_class_zone(3, 2, xw.Range(f'J{index - 4}').value * 1000, 45320, 7, 2)
         # 3. Запишем решение
         xw.Range(f'T{index - 4}').value = zone_cls_array[1]
         xw.Range(f'U{index - 4}').value = zone_cls_array[2]
@@ -456,8 +456,8 @@ for index in all_index_of_type_tree:
         # 1. Получим класс для расчета взрыва
         explosion_unit = calc_tvs_explosion.Explosion()
         # 2. Получим зоны классифицированные
-        zone_cls_array = explosion_unit.explosion_class_zone(2, 3, xw.Range(f'J{index - 4}').value * 1000, 45320, 7, 2)
-        zone_cls_array_2 = explosion_unit.explosion_class_zone(2, 3, xw.Range(f'J{index}').value * 1000, 45320, 7, 2)
+        zone_cls_array = explosion_unit.explosion_class_zone(3, 2, xw.Range(f'J{index - 4}').value * 1000, 45320, 7, 2)
+        zone_cls_array_2 = explosion_unit.explosion_class_zone(3, 2, xw.Range(f'J{index}').value * 1000, 45320, 7, 2)
         # 3. Запишем решение
         xw.Range(f'T{index - 4}').value = zone_cls_array[1]
         xw.Range(f'U{index - 4}').value = zone_cls_array[2]

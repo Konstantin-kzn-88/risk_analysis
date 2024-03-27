@@ -35,7 +35,6 @@ class Explosion:
                (200, 150, 43 * pow(mass, 1 / 6), 26 * pow(mass, 1 / 6)))
 
         v_burn_rate = tmp[class_substance - 1][view_space - 1] if view_space >= 1 and view_space <= 4 else min(tmp)
-
         return v_burn_rate
 
     def explosion_point(self, class_substance: int, view_space: int, mass: float,
@@ -175,9 +174,9 @@ class Explosion:
 if __name__ == '__main__':
     ev_class = Explosion()
     class_substance = 3
-    view_space = 3
-    mass = 170
-    heat_of_combustion = 46000
+    view_space = 2
+    mass = 1980
+    heat_of_combustion = 44000
     sigma = 7
     energy_level = 2
 
