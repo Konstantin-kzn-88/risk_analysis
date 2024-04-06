@@ -13,6 +13,7 @@ class Report:
             wb = xw.Book('risk_analysis_prototype.xlsx')
             self.ws_DB = wb.sheets['DB']
             self.ws_MASS = wb.sheets['Масса ОВ']
+            self.ws_STATISTICS = wb.sheets['Статистика аварий']
 
         except FileNotFoundError:
             print('Файл не открыт risk_analysis_prototype.xlsx')
@@ -32,6 +33,11 @@ class Report:
         # 1.3. данные по количеству опасного вещества
         context['mass_sub_table'] = self.__get_data_in_MASS_list()
         context['sum_sub'] = round(sum([float(i['Quantity']) for i in context['mass_sub_table']]),2)
+        # 1.4. данные по статистике аварий
+        context['oil_tank_accident_table'] = self.__get_data_in_STATISTICS_list()[0]
+        context['oil_pipeline_accident_table'] = self.__get_data_in_STATISTICS_list()[1]
+
+
 
         doc = DocxTemplate(f'temp_rpz.docx')
         # Заполним документ из словаря
@@ -40,7 +46,7 @@ class Report:
 
     def __get_data_in_DB_list(self) -> dict:
         # получим данные с листа данных проекта
-        data = self.ws_DB.range("A2:C22").value
+        data = self.ws_DB.range("A2:C300").value
         result_dict = {}
         for item in data:
             if item[1] == None: break
@@ -49,7 +55,7 @@ class Report:
 
     def __get_data_in_MASS_list(self) -> list:
         # получим данные с листа c массами данных
-        data = self.ws_MASS.range("A3:R22").value
+        data = self.ws_MASS.range("A3:R300").value
 
         result_list = []
         for item in data:
@@ -68,6 +74,36 @@ class Report:
                        'State': item[5]}
             result_list.append(devices)
         return result_list
+
+    def __get_data_in_STATISTICS_list(self) -> tuple:
+        # получим данные с листа статистики
+        data_tank = self.ws_STATISTICS.range("A2:F10").value
+        data_pipe = self.ws_STATISTICS.range("H2:M10").value
+
+        result_list_tank = []
+        for item in data_tank:
+            if item[0] == None: break
+            accident = {'Num': item[0],
+                       'Date': item[1],
+                       'View': item[2],
+                       'Description': item[3],
+                       'Scale': item[4],
+                       'Damage': item[5]}
+            result_list_tank.append(accident)
+
+        result_list_pipe = []
+        for item in data_pipe:
+            if item[0] == None: break
+            accident = {'Num': item[0],
+                       'Date': item[1],
+                       'View': item[2],
+                       'Description': item[3],
+                       'Scale': item[4],
+                       'Damage': item[5]}
+            result_list_pipe.append(accident)
+
+
+        return (result_list_tank, result_list_pipe)
 
 
 if __name__ == '__main__':
