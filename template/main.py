@@ -14,9 +14,13 @@ class Report:
             self.ws_DB = wb.sheets['DB']
             self.ws_MASS = wb.sheets['Масса ОВ']
             self.ws_STATISTICS = wb.sheets['Статистика аварий']
+            self.ws_CALC = wb.sheets['Расчет']
+            self.data_for_table = self.__get_data_in_CALC_list()
 
         except FileNotFoundError:
             print('Файл не открыт risk_analysis_prototype.xlsx')
+        except:
+            print('Ошибка со страницами')
 
     def temp_explanatory_note(self):
         path_template = Path(__file__).parents[0]
@@ -32,12 +36,14 @@ class Report:
         context['pipe_table'] = [x for x in self.__get_data_in_MASS_list() if x['Volume_pipe'] != 0]
         # 1.3. данные по количеству опасного вещества
         context['mass_sub_table'] = self.__get_data_in_MASS_list()
-        context['sum_sub'] = round(sum([float(i['Quantity']) for i in context['mass_sub_table']]),2)
+        context['sum_sub'] = round(sum([float(i['Quantity']) for i in context['mass_sub_table']]), 2)
         # 1.4. данные по статистике аварий
         context['oil_tank_accident_table'] = self.__get_data_in_STATISTICS_list()[0]
         context['oil_pipeline_accident_table'] = self.__get_data_in_STATISTICS_list()[1]
-
-
+        # 1.5. Таблица с описанием сценариев и частотами
+        context['scenario_table'] = self.__get_data_for_scenario_table()
+        # 1.6. Таблица с массами участвует в аварии и в поражающем факторе
+        context['mass_table'] = self.__get_data_for_mass_table()
 
         doc = DocxTemplate(f'temp_rpz.docx')
         # Заполним документ из словаря
@@ -69,8 +75,8 @@ class Report:
                        'Diameter': item[10],
                        'Length': item[9],
                        'Flow': item[11],
-                       'Volume_pipe': round(item[8],1),
-                       'Quantity': round(item[3],1),
+                       'Volume_pipe': round(item[8], 1),
+                       'Quantity': round(item[3], 1),
                        'State': item[5]}
             result_list.append(devices)
         return result_list
@@ -84,26 +90,58 @@ class Report:
         for item in data_tank:
             if item[0] == None: break
             accident = {'Num': item[0],
-                       'Date': item[1],
-                       'View': item[2],
-                       'Description': item[3],
-                       'Scale': item[4],
-                       'Damage': item[5]}
+                        'Date': item[1],
+                        'View': item[2],
+                        'Description': item[3],
+                        'Scale': item[4],
+                        'Damage': item[5]}
             result_list_tank.append(accident)
 
         result_list_pipe = []
         for item in data_pipe:
             if item[0] == None: break
             accident = {'Num': item[0],
-                       'Date': item[1],
-                       'View': item[2],
-                       'Description': item[3],
-                       'Scale': item[4],
-                       'Damage': item[5]}
+                        'Date': item[1],
+                        'View': item[2],
+                        'Description': item[3],
+                        'Scale': item[4],
+                        'Damage': item[5]}
             result_list_pipe.append(accident)
 
-
         return (result_list_tank, result_list_pipe)
+
+    def __get_data_in_CALC_list(self):
+        # получим данные с листа данных Расчет
+        data = [i for i in self.ws_CALC.range("A2:BA1000").value if i[0] is not None]
+        i = 1
+        for k in data:
+            k[0] = f'C{i}'
+            i += 1
+        return data
+
+    def __get_data_for_scenario_table(self):
+        data = self.data_for_table
+
+        result_list = []
+        for item in data:
+            devices = {'Sc': item[0],
+                       'Unit': item[1],
+                       'Sc_text': item[2],
+                       'Сhance': "{:.2e}".format(item[7])}
+            result_list.append(devices)
+        return result_list
+
+    def __get_data_for_mass_table(self):
+        data = self.data_for_table
+
+        result_list = []
+        for item in data:
+            devices = {'Sc': item[0],
+                       'Unit': item[1],
+                       'M1': round(item[8], 3),
+                       'M2': round(item[9], 3)}
+            result_list.append(devices)
+        return result_list
 
 
 if __name__ == '__main__':
