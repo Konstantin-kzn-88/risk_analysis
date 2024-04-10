@@ -44,6 +44,8 @@ class Report:
         context['scenario_table'] = self.__get_data_for_scenario_table()
         # 1.6. Таблица с массами участвует в аварии и в поражающем факторе
         context['mass_table'] = self.__get_data_for_mass_table()
+        # 1.7. Таблица с расчетами
+        context['calc_table'] = self.__get_data_for_calc_table()
 
         doc = DocxTemplate(f'temp_rpz.docx')
         # Заполним документ из словаря
@@ -143,6 +145,33 @@ class Report:
             result_list.append(devices)
         return result_list
 
+    def __get_data_for_calc_table(self):
+        data = self.data_for_table
+        result_list = []
+        for item in data:
+            devices = {'Sc': item[0],
+                       'Unit': item[1],
+                       'q_10': item[15],
+                       'q_7': item[16],
+                       'q_4': item[17],
+                       'q_1': item[18],
+                       'P_28': item[20],
+                       'P_14': item[21],
+                       'P_5': item[22],
+                       'P_2': item[23],
+                       'Lf': item[24],
+                       'Df': item[25],
+                       'Rnkpr': item[26],
+                       'Rvsp': item[27],
+                       'Lpt': item[28],
+                       'Ppt': item[29],
+                       'Q600': item[30],
+                       'Q320': item[31],
+                       'Q220': item[32],
+                       'Q120': item[33]
+                       }
+            result_list.append(devices)
+        return result_list
 
 if __name__ == '__main__':
     r = Report().temp_explanatory_note()

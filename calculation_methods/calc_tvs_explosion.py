@@ -117,7 +117,7 @@ class Explosion:
                                        energy_level, radius)[0]
 
         # просчитаем значения пока взрыв больше 2.9 кПА
-        while delta_p > 2.9:
+        while delta_p > 1.9:
             res = self.explosion_point(class_substance, view_space,
                                        mass, heat_of_combustion, sigma,
                                        energy_level, radius)
@@ -155,7 +155,7 @@ class Explosion:
                                         energy_level)
 
         # Calculate classified_zone_array
-        classified_zone_array = [100, 53, 28, 12, 5, 3]  # CZA
+        classified_zone_array = [100, 70, 28, 14, 5, 2]  # CZA
         radius_CZA = []
         delta_p_array = res_list[1]
         radius_array = res_list[0]
