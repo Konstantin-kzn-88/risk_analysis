@@ -248,6 +248,11 @@ class Report:
     def temp_declaration_note(self):
         doc = DocxTemplate(f'temp_dpb.docx')
         path_template = Path(__file__).parents[0]
+        # создадим общий словарь для заполнения документа
+        context = {}
+        # 1.1. данные по количеству опасного вещества
+        context['mass_sub_table'] = self.__get_data_in_MASS_list()
+        context['sum_sub'] = round(sum([float(i['Quantity']) for i in context['mass_sub_table']]), 2)
 
     def __get_data_in_DB_list(self) -> dict:
         # получим данные с листа данных проекта
