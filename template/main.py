@@ -228,13 +228,13 @@ class Report:
         # 1.11. Выводы РПЗ (п.2.3. РПЗ)
         most_possible = self.__get_most_possible_scenario()
         context[
-            'most_possible'] = f'''сценарий: {most_possible[0]}, оборудование: {most_possible[1]}, частота {"{:.2e}".format(most_possible[2])} 1/год, ущерб: {round(most_possible[3], 2)} млн.руб.'''
+            'most_possible'] = f'''сценарий: {most_possible[0]}, оборудование: {most_possible[1]}, частота {"{:.2e}".format(most_possible[7])} 1/год, ущерб: {round(most_possible[47], 2)} млн.руб.'''
         most_dangerous = self.__get_most_dangerous_scenario()
         context[
-            'most_dangerous'] = f'''сценарий: {most_dangerous[0]}, оборудование: {most_dangerous[1]}, частота {"{:.2e}".format(most_dangerous[2])} 1/год, ущерб: {round(most_dangerous[3], 2)} млн.руб.'''
+            'most_dangerous'] = f'''сценарий: {most_dangerous[0]}, оборудование: {most_dangerous[1]}, частота {"{:.2e}".format(most_dangerous[7])} 1/год, ущерб: {round(most_dangerous[47], 2)} млн.руб.'''
 
-        context['probability_end'] = "{:.2e}".format(most_possible[2])
-        context['damage_end'] = round(most_dangerous[3], 2)
+        context['probability_end'] = "{:.2e}".format(most_possible[7])
+        context['damage_end'] = round(most_dangerous[47], 2)
         _temp = sum([i[48] for i in self.data_for_table]) / self.ws_DB.range("B23").value
         context['RdB'] = round(10 * math.log10(_temp * pow(10, 5) / 195),2)
         context['Rng'] = "{:.2e}".format((_temp) * pow(10, 6))
@@ -250,9 +250,68 @@ class Report:
         path_template = Path(__file__).parents[0]
         # создадим общий словарь для заполнения документа
         context = {}
-        # 1.1. данные по количеству опасного вещества
+        # 1. данные для словаря
+        context['year'] = datetime.date.today().year
+        # 1.1. данные общие
+        context |= self.__get_data_in_DB_list()
+        # 1.2. данные по количеству опасного вещества
         context['mass_sub_table'] = self.__get_data_in_MASS_list()
         context['sum_sub'] = round(sum([float(i['Quantity']) for i in context['mass_sub_table']]), 2)
+        # 1.3. Заполнение данных по наиболее вероятному и опасному сценарию
+        most_possible = self.__get_most_possible_scenario() #MP
+        most_dangerous = self.__get_most_dangerous_scenario() #MD
+        context['num_MP'] = most_possible[0]
+        context['num_MD'] = most_dangerous[0]
+        context['scenario_MP'] = most_possible[2]
+        context['scenario_MD'] = most_dangerous[2]
+        context['mass_MD'] = most_dangerous[8]
+        context['pr_MD'] = most_dangerous[7]
+        context['unit_MP'] = most_possible[1]
+        context['unit_MD'] = most_dangerous[1]
+        context['dP_70'] = most_dangerous[19]
+        context['dP_28'] = most_dangerous[20]
+        context['dP_14'] = most_dangerous[21]
+        context['dP_5'] = most_dangerous[22]
+        context['dP_2'] = most_dangerous[23]
+        context['dead_MP'] = int(most_possible[35])
+        context['dead_MD'] = int(most_dangerous[35])
+        context['inj_MP'] = int(most_possible[36])
+        context['inj_MD'] =int( most_dangerous[36])
+        context['damage_MP'] = round(most_possible[47],2)
+        context['damage_MD'] = round(most_dangerous[47],2)
+        # 1.4. Анализ риска (п.2.3.2 ДПБ)
+        context['R1_min'] = "{:.2e}".format(min([i[7] for i in self.data_for_table]))
+        context['R1_max'] = "{:.2e}".format(max([i[7] for i in self.data_for_table]))
+        context['R_koll_dead'] = "{:.2e}".format(sum([i[48] for i in self.data_for_table]))
+        context['R_koll_injury'] = "{:.2e}".format(sum([i[49] for i in self.data_for_table]))
+        context['R_ind_dead'] = "{:.2e}".format(
+            sum([i[48] for i in self.data_for_table]) / self.ws_DB.range("B23").value)
+        context['R_ind_injury'] = "{:.2e}".format(
+            sum([i[49] for i in self.data_for_table]) / self.ws_DB.range("B23").value)
+        context['R_ecol'] = round(max([i[46] for i in self.data_for_table]), 2)
+        context['R_sum'] = round(max([i[47] for i in self.data_for_table]), 2)
+        # диаграммы отрисованы temp_explanatory_note
+        context['fn'] = InlineImage(doc, f'{path_template}\\fn.jpg', width=Mm(140))
+        context['fg'] = InlineImage(doc, f'{path_template}\\fg.jpg', width=Mm(140))
+        # 1.11. Выводы ДПБ (п.4.1. РПЗ)
+        most_possible = self.__get_most_possible_scenario()
+        context[
+            'most_possible'] = f'''сценарий: {most_possible[0]}, оборудование: {most_possible[1]}, частота {"{:.2e}".format(most_possible[7])} 1/год, ущерб: {round(most_possible[47], 2)} млн.руб.'''
+        most_dangerous = self.__get_most_dangerous_scenario()
+        context[
+            'most_dangerous'] = f'''сценарий: {most_dangerous[0]}, оборудование: {most_dangerous[1]}, частота {"{:.2e}".format(most_dangerous[7])} 1/год, ущерб: {round(most_dangerous[47], 2)} млн.руб.'''
+
+        context['probability_end'] = "{:.2e}".format(most_possible[7])
+        context['damage_end'] = round(most_dangerous[47], 2)
+        _temp = sum([i[48] for i in self.data_for_table]) / self.ws_DB.range("B23").value
+        context['RdB'] = round(10 * math.log10(_temp * pow(10, 5) / 195),2)
+        context['Rng'] = "{:.2e}".format((_temp) * pow(10, 6))
+        context['Rng2'] = "{:.2e}".format((_temp) * pow(10, 5))
+
+
+        # Заполним документ из словаря
+        doc.render(context)
+        doc.save(f'{path_template}\\add_docs\\DPB_{INIQ_TEXT}.docx')
 
     def __get_data_in_DB_list(self) -> dict:
         # получим данные с листа данных проекта
@@ -381,8 +440,8 @@ class Report:
         for item in data:
             devices = {'Sc': item[0],
                        'Unit': item[1],
-                       'Men1': item[35],
-                       'Men2': item[36]}
+                       'Men1': int(item[35]),
+                       'Men2': int(item[36])}
             result_list.append(devices)
         return result_list
 
@@ -419,16 +478,16 @@ class Report:
         search = max([i[7] for i in self.data_for_table])
         for item in data:
             if item[7] == search:
-                return (item[0], item[1], item[7], item[47])
-        return (0, 0, 0, 0)
+                return item
+        return [0 for _ in range(len(data[0]))]
 
     def __get_most_dangerous_scenario(self):
         data = self.data_for_table
         search = max([i[35] for i in self.data_for_table])
         for item in data:
             if item[35] == search:
-                return (item[0], item[1], item[7], item[47])
-        return (0, 0, 0, 0)
+                return item
+        return [0 for _ in range(len(data[0]))]
 
     def pss(self):
         data = self.data_for_table
@@ -438,5 +497,6 @@ class Report:
 
 
 if __name__ == '__main__':
-    r = Report().temp_explanatory_note()
+    # r = Report().temp_explanatory_note()
+    r = Report().temp_declaration_note()
     # r = Report().pss()
