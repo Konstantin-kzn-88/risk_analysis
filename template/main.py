@@ -46,6 +46,8 @@ class Report:
         context['mass_table'] = self.__get_data_for_mass_table()
         # 1.7. Таблица с расчетами
         context['calc_table'] = self.__get_data_for_calc_table()
+        # 1.8. Таблица с погибшими
+        context['dead_table'] = self.__get_data_for_dead_table()
 
         doc = DocxTemplate(f'temp_rpz.docx')
         # Заполним документ из словаря
@@ -170,6 +172,17 @@ class Report:
                        'Q220': item[32],
                        'Q120': item[33]
                        }
+            result_list.append(devices)
+        return result_list
+
+    def __get_data_for_dead_table(self):
+        data = self.data_for_table
+        result_list = []
+        for item in data:
+            devices = {'Sc': item[0],
+                       'Unit': item[1],
+                       'Men1': item[35],
+                       'Men2': item[36]}
             result_list.append(devices)
         return result_list
 
