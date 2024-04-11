@@ -236,7 +236,7 @@ class Report:
         context['probability_end'] = "{:.2e}".format(most_possible[7])
         context['damage_end'] = round(most_dangerous[47], 2)
         _temp = sum([i[48] for i in self.data_for_table]) / self.ws_DB.range("B23").value
-        context['RdB'] = round(10 * math.log10(_temp * pow(10, 5) / 195),2)
+        context['RdB'] = round(10 * math.log10(_temp * pow(10, 5) / 195), 2)
         context['Rng'] = "{:.2e}".format((_temp) * pow(10, 6))
         context['Rng2'] = "{:.2e}".format((_temp) * pow(10, 5))
 
@@ -258,8 +258,8 @@ class Report:
         context['mass_sub_table'] = self.__get_data_in_MASS_list()
         context['sum_sub'] = round(sum([float(i['Quantity']) for i in context['mass_sub_table']]), 2)
         # 1.3. Заполнение данных по наиболее вероятному и опасному сценарию
-        most_possible = self.__get_most_possible_scenario() #MP
-        most_dangerous = self.__get_most_dangerous_scenario() #MD
+        most_possible = self.__get_most_possible_scenario()  # MP
+        most_dangerous = self.__get_most_dangerous_scenario()  # MD
         context['num_MP'] = most_possible[0]
         context['num_MD'] = most_dangerous[0]
         context['scenario_MP'] = most_possible[2]
@@ -276,9 +276,11 @@ class Report:
         context['dead_MP'] = int(most_possible[35])
         context['dead_MD'] = int(most_dangerous[35])
         context['inj_MP'] = int(most_possible[36])
-        context['inj_MD'] =int( most_dangerous[36])
-        context['damage_MP'] = round(most_possible[47],2)
-        context['damage_MD'] = round(most_dangerous[47],2)
+        context['inj_MD'] = int(most_dangerous[36])
+        context['damage_MP'] = round(most_possible[47], 2)
+        context['damage_MD'] = round(most_dangerous[47], 2)
+        context['R_koll_dead'] = "{:.2e}".format(sum([i[48] for i in self.data_for_table]))
+        context['R_koll_injury'] = "{:.2e}".format(sum([i[49] for i in self.data_for_table]))
         # 1.4. Анализ риска (п.2.3.2 ДПБ)
         context['R1_min'] = "{:.2e}".format(min([i[7] for i in self.data_for_table]))
         context['R1_max'] = "{:.2e}".format(max([i[7] for i in self.data_for_table]))
@@ -304,14 +306,48 @@ class Report:
         context['probability_end'] = "{:.2e}".format(most_possible[7])
         context['damage_end'] = round(most_dangerous[47], 2)
         _temp = sum([i[48] for i in self.data_for_table]) / self.ws_DB.range("B23").value
-        context['RdB'] = round(10 * math.log10(_temp * pow(10, 5) / 195),2)
+        context['RdB'] = round(10 * math.log10(_temp * pow(10, 5) / 195), 2)
         context['Rng'] = "{:.2e}".format((_temp) * pow(10, 6))
         context['Rng2'] = "{:.2e}".format((_temp) * pow(10, 5))
-
 
         # Заполним документ из словаря
         doc.render(context)
         doc.save(f'{path_template}\\add_docs\\DPB_{INIQ_TEXT}.docx')
+
+    def temp_info_note(self):
+        doc = DocxTemplate(f'temp_ifl.docx')
+        path_template = Path(__file__).parents[0]
+        # создадим общий словарь для заполнения документа
+        context = {}
+        # 1. данные для словаря
+        context['year'] = datetime.date.today().year
+        # 1.1. данные общие
+        context |= self.__get_data_in_DB_list()
+        # диаграммы отрисованы temp_explanatory_note
+        context['fn'] = InlineImage(doc, f'{path_template}\\fn.jpg', width=Mm(140))
+        context['fg'] = InlineImage(doc, f'{path_template}\\fg.jpg', width=Mm(140))
+        # 1.2. Выводы ИФЛ
+        context['R_koll_dead'] = "{:.2e}".format(sum([i[48] for i in self.data_for_table]))
+        context['R_ind_dead'] = "{:.2e}".format(
+            sum([i[48] for i in self.data_for_table]) / self.ws_DB.range("B23").value)
+
+        most_possible = self.__get_most_possible_scenario()
+        context[
+            'most_possible'] = f'''сценарий: {most_possible[0]}, оборудование: {most_possible[1]}, частота {"{:.2e}".format(most_possible[7])} 1/год, ущерб: {round(most_possible[47], 2)} млн.руб.'''
+        most_dangerous = self.__get_most_dangerous_scenario()
+        context[
+            'most_dangerous'] = f'''сценарий: {most_dangerous[0]}, оборудование: {most_dangerous[1]}, частота {"{:.2e}".format(most_dangerous[7])} 1/год, ущерб: {round(most_dangerous[47], 2)} млн.руб.'''
+
+        context['probability_end'] = "{:.2e}".format(most_possible[7])
+        context['damage_end'] = round(most_dangerous[47], 2)
+        _temp = sum([i[48] for i in self.data_for_table]) / self.ws_DB.range("B23").value
+        context['RdB'] = round(10 * math.log10(_temp * pow(10, 5) / 195), 2)
+        context['Rng'] = "{:.2e}".format((_temp) * pow(10, 6))
+        context['Rng2'] = "{:.2e}".format((_temp) * pow(10, 5))
+
+        # Заполним документ из словаря
+        doc.render(context)
+        doc.save(f'{path_template}\\add_docs\\IFL_{INIQ_TEXT}.docx')
 
     def __get_data_in_DB_list(self) -> dict:
         # получим данные с листа данных проекта
@@ -489,14 +525,8 @@ class Report:
                 return item
         return [0 for _ in range(len(data[0]))]
 
-    def pss(self):
-        data = self.data_for_table
-        search = max([i[7] for i in self.data_for_table])
-        print(search)
-        print((any(e[7] == search for e in data)))
-
 
 if __name__ == '__main__':
     # r = Report().temp_explanatory_note()
-    r = Report().temp_declaration_note()
-    # r = Report().pss()
+    # Report().temp_declaration_note()
+    Report().temp_info_note()
