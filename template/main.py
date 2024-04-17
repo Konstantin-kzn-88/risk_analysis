@@ -527,6 +527,6 @@ class Report:
 
 
 if __name__ == '__main__':
-    # r = Report().temp_explanatory_note()
+    r = Report().temp_explanatory_note()
     # Report().temp_declaration_note()
-    Report().temp_info_note()
+    # Report().temp_info_note()
