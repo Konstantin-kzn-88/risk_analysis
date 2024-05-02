@@ -236,7 +236,7 @@ class Report:
         context['probability_end'] = "{:.2e}".format(most_possible[7])
         context['damage_end'] = round(most_dangerous[47], 2)
         _temp = sum([i[48] for i in self.data_for_table]) / self.ws_DB.range("B23").value
-        context['RdB'] = round(10 * math.log10(_temp * pow(10, 5) / 195), 2)
+        context['RdB'] = round(10 * math.log10(_temp * pow(10, 6) / 195), 2)
         context['Rng'] = "{:.2e}".format((_temp) * pow(10, 6))
         context['Rng2'] = "{:.2e}".format((_temp) * pow(10, 5))
 
@@ -341,7 +341,7 @@ class Report:
         context['probability_end'] = "{:.2e}".format(most_possible[7])
         context['damage_end'] = round(most_dangerous[47], 2)
         _temp = sum([i[48] for i in self.data_for_table]) / self.ws_DB.range("B23").value
-        context['RdB'] = round(10 * math.log10(_temp * pow(10, 5) / 195), 2)
+        context['RdB'] = round(10 * math.log10(_temp * pow(10, 6) / 195), 2)
         context['Rng'] = "{:.2e}".format((_temp) * pow(10, 6))
         context['Rng2'] = "{:.2e}".format((_temp) * pow(10, 5))
 
@@ -527,6 +527,6 @@ class Report:
 
 
 if __name__ == '__main__':
-    # Report().temp_explanatory_note()
+    Report().temp_explanatory_note()
     Report().temp_declaration_note()
-    # Report().temp_info_note()
+    Report().temp_info_note()
