@@ -106,7 +106,7 @@ class FN_FG_chart:
             # self.ws.pictures.add(fig, name='FN', update=True, left=self.ws.range('H5').left,
             #                      top=self.ws.range('H5').top)
             # plt.show()
-            plt.savefig(f'fn.jpg')
+            plt.savefig(f'fn.jpg', bbox_inches='tight', dpi=300)
 
     def fg_chart(self):
         """
@@ -162,7 +162,7 @@ class FN_FG_chart:
             # self.ws.pictures.add(fig, name='FG', update=True, left=self.ws.range('Q5').left,
             #                      top=self.ws.range('Q5').top)
             # plt.show()
-            plt.savefig(f'fg.jpg')
+            plt.savefig(f'fg.jpg', bbox_inches='tight', dpi=300)
 
 
 class Report:
