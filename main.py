@@ -2,7 +2,7 @@ import xlwings as xw
 from calculation_methods import calc_strait_fire, calc_tvs_explosion, calc_jet_fire, calc_lower_concentration, \
     calc_fireball
 
-DEGREE_OF_CLUTTER = 4 #степень загроможденности
+DEGREE_OF_CLUTTER = 3 #степень загроможденности
 
 
 def toxi_fake(r: int):
@@ -35,7 +35,7 @@ for index in all_index_of_type_tree:
         'НКПР, об.%': xw.Range(f'L{index - 1}').value,
         'Тип дерева': xw.Range(f'L{index}').value,
     }
-
+    # print(get_data_for_calc)
     if get_data_for_calc['Тип дерева'] == 3:
         # ПОЖАР
         # 1. Получить экземпляр класса пожара
@@ -449,6 +449,79 @@ for index in all_index_of_type_tree:
         xw.Range(f'Q{index - 1}').value = zone_array_2[1]
         xw.Range(f'R{index - 1}').value = zone_array_2[2]
         xw.Range(f'S{index - 1}').value = zone_array_2[3]
+
+
+    if get_data_for_calc['Тип дерева'] == 12:
+        # ПОЖАР
+        # 1. Получить экземпляр класса пожара
+        fire_unit = calc_strait_fire.Strait_fire()
+        # 2. Получить зоны классифицированные
+        zone_array = fire_unit.termal_class_zone(get_data_for_calc['Площадь, м2'], 0.06, 100, 20, 1)
+        # 3. Запишем решение
+        # ПОЖАР
+        xw.Range(f'P{index - 5}').value = zone_array[0]
+        xw.Range(f'Q{index - 5}').value = zone_array[1]
+        xw.Range(f'R{index - 5}').value = zone_array[2]
+        xw.Range(f'S{index - 5}').value = zone_array[3]
+
+        # ВЗРЫВ
+        # 1. Получим класс для расчета взрыва
+        explosion_unit = calc_tvs_explosion.Explosion()
+        # 2. Получим зоны классифицированные
+        zone_cls_array = explosion_unit.explosion_class_zone(3, DEGREE_OF_CLUTTER, xw.Range(f'J{index - 4}').value * 1000, 45320, 7, 2)
+        # 3. Запишем решение
+        xw.Range(f'T{index - 4}').value = zone_cls_array[1]
+        xw.Range(f'U{index - 4}').value = zone_cls_array[2]
+        xw.Range(f'V{index - 4}').value = zone_cls_array[3]
+        xw.Range(f'W{index - 4}').value = zone_cls_array[4]
+        xw.Range(f'X{index - 4}').value = zone_cls_array[5]
+
+        # ФАКЕЛ
+        # 1. Получим класс для расчета
+        jetfire_unit = calc_jet_fire.Torch()
+        # 2а. Получим зоны полный жидкостной факел
+        lenght, width = jetfire_unit.jetfire_size(get_data_for_calc['Расход жидкость, кг/с'], 2)
+        # 3. Запишем решение
+        xw.Range(f'Y{index - 2}').value = lenght
+        xw.Range(f'Z{index - 2}').value = width
+        # 2б. Получим зоны частичный жидкостной факел
+        lenght, width = jetfire_unit.jetfire_size(get_data_for_calc['Расход газ, кг/с'] / 3, 1)
+        # 3. Запишем решение
+        xw.Range(f'Y{index}').value = lenght
+        xw.Range(f'Z{index}').value = width
+
+        # ПОЖАР-ВСПЫШКА
+        # 1. Получим класс для расчета
+        lclp_unit = calc_lower_concentration.LCLP()
+        # 2. Получим зоны
+        zone_lclp = lclp_unit.lower_concentration_limit(xw.Range(f'J{index + 1}').value * 1000, 100, 30,
+                                                        get_data_for_calc['НКПР, об.%'])
+        # 3. Запишем решение
+        xw.Range(f'AA{index + 1}').value = zone_lclp[0]
+        xw.Range(f'AB{index + 1}').value = zone_lclp[1]
+
+        # ОГНЕННЫЙ ШАР+ПОЖАР
+        # 1. Получим класс для расчета шара
+        fireball_unit = calc_fireball.Fireball()
+        # 2. Получим зоны классифицированные
+        zone_cls_array = fireball_unit.termal_class_zone(xw.Range(f'J{index + 3}').value * 1000, 350)
+
+        # 3. Запишем решение
+        xw.Range(f'AE{index + 3}').value = zone_cls_array[0]
+        xw.Range(f'AF{index + 3}').value = zone_cls_array[1]
+        xw.Range(f'AG{index + 3}').value = zone_cls_array[2]
+        xw.Range(f'AH{index + 3}').value = zone_cls_array[3]
+
+        # 1. Получить экземпляр класса пожара
+        fire_unit = calc_strait_fire.Strait_fire()
+        # 2. Получить зоны классифицированные
+        zone_array = fire_unit.termal_class_zone(get_data_for_calc['Площадь, м2'], 0.06, 100, 20, 1)
+        # 3. Запишем решение
+        xw.Range(f'P{index + 3}').value = zone_array[0]
+        xw.Range(f'Q{index + 3}').value = zone_array[1]
+        xw.Range(f'R{index + 3}').value = zone_array[2]
+        xw.Range(f'S{index + 3}').value = zone_array[3]
+
 
 
     if get_data_for_calc['Тип дерева'] == 21:
