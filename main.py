@@ -82,6 +82,7 @@ for index in all_index_of_type_tree:
 
     if get_data_for_calc['Тип дерева'] == 3:
         # ПОЖАР
+        print("Hi")
         # 1. Получить экземпляр класса пожара
         fire_unit = calc_strait_fire.Strait_fire()
         # 2. Получить зоны классифицированные

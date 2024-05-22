@@ -374,8 +374,8 @@ class Report:
                        'Diameter': item[10],
                        'Length': item[9],
                        'Flow': item[11],
-                       'Volume_pipe': round(item[8], 1),
-                       'Quantity': round(item[3], 1),
+                       'Volume_pipe': round(item[8], 3),
+                       'Quantity': round(item[3], 3),
                        'State': item[5]}
             result_list.append(devices)
         return result_list
