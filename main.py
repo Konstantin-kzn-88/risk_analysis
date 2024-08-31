@@ -2,7 +2,7 @@ import xlwings as xw
 from calculation_methods import calc_strait_fire, calc_tvs_explosion, calc_jet_fire, calc_lower_concentration, \
     calc_fireball
 
-DEGREE_OF_CLUTTER = 4 #степень загроможденности
+DEGREE_OF_CLUTTER = 3 #степень загроможденности
 
 
 def toxi_fake(r: int):
