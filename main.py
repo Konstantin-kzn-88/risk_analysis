@@ -2,7 +2,7 @@ import xlwings as xw
 from calculation_methods import calc_strait_fire, calc_tvs_explosion, calc_jet_fire, calc_lower_concentration, \
     calc_fireball
 
-DEGREE_OF_CLUTTER = 4 #степень загроможденности
+DEGREE_OF_CLUTTER = 3 #степень загроможденности
 
 
 def toxi_fake(r: int):
@@ -36,6 +36,44 @@ for index in all_index_of_type_tree:
         'Тип дерева': xw.Range(f'L{index}').value,
     }
     # print(get_data_for_calc)
+
+    if get_data_for_calc['Тип дерева'] == 18:
+        # ФАКЕЛ
+        # 1. Получим класс для расчета
+        jetfire_unit = calc_jet_fire.Torch()
+        # 2а. Получим зоны полный жидкостной факел
+        lenght, width = jetfire_unit.jetfire_size(get_data_for_calc['Расход жидкость, кг/с'], 2)
+        # 3. Запишем решение
+        xw.Range(f'Y{index - 5}').value = lenght
+        xw.Range(f'Z{index - 5}').value = width
+        # ПОЖАР
+        # 1. Получить экземпляр класса пожара
+        fire_unit = calc_strait_fire.Strait_fire()
+        # 2. Получить зоны классифицированные
+        zone_array = fire_unit.termal_class_zone(get_data_for_calc['Площадь, м2'], 0.06, 100, 20, 1)
+        # 3. Запишем решение
+        xw.Range(f'P{index - 4}').value = zone_array[0]
+        xw.Range(f'Q{index - 4}').value = zone_array[1]
+        xw.Range(f'R{index - 4}').value = zone_array[2]
+        xw.Range(f'S{index - 4}').value = zone_array[3]
+
+
+        # ПОЖАР
+        # 1. Получить экземпляр класса пожара
+        fire_unit = calc_strait_fire.Strait_fire()
+        # 2. Получить зоны классифицированные
+        zone_array = fire_unit.termal_class_zone(get_data_for_calc['Площадь, м2']/3, 0.06, 100, 20, 1)
+        # 3. Запишем решение
+        xw.Range(f'P{index - 2}').value = zone_array[0]
+        xw.Range(f'Q{index - 2}').value = zone_array[1]
+        xw.Range(f'R{index - 2}').value = zone_array[2]
+        xw.Range(f'S{index - 2}').value = zone_array[3]
+
+        xw.Range(f'P{index - 1}').value = zone_array[0]
+        xw.Range(f'Q{index - 1}').value = zone_array[1]
+        xw.Range(f'R{index - 1}').value = zone_array[2]
+        xw.Range(f'S{index - 1}').value = zone_array[3]
+
     if get_data_for_calc['Тип дерева'] == 16:
         # ФАКЕЛ
         # 1. Получим класс для расчета
@@ -108,6 +146,36 @@ for index in all_index_of_type_tree:
         xw.Range(f'Q{index - 1}').value = zone_array_2[1]
         xw.Range(f'R{index - 1}').value = zone_array_2[2]
         xw.Range(f'S{index - 1}').value = zone_array_2[3]
+
+    if get_data_for_calc['Тип дерева'] == 11:
+        # ПОЖАР
+        print("Hi")
+        # 1. Получить экземпляр класса пожара
+        fire_unit = calc_strait_fire.Strait_fire()
+        # 2. Получить зоны классифицированные
+        zone_array = fire_unit.termal_class_zone(get_data_for_calc['Площадь, м2'], 0.06, 100, 20, 1)
+        zone_array_2 = fire_unit.termal_class_zone(get_data_for_calc['Площадь, м2'] / 10, 0.06, 100, 20, 1)
+        # 3. Запишем решение
+        xw.Range(f'P{index - 5}').value = zone_array[0]
+        xw.Range(f'Q{index - 5}').value = zone_array[1]
+        xw.Range(f'R{index - 5}').value = zone_array[2]
+        xw.Range(f'S{index - 5}').value = zone_array[3]
+
+        xw.Range(f'P{index - 4}').value = zone_array[0]
+        xw.Range(f'Q{index - 4}').value = zone_array[1]
+        xw.Range(f'R{index - 4}').value = zone_array[2]
+        xw.Range(f'S{index - 4}').value = zone_array[3]
+
+        xw.Range(f'P{index - 2}').value = zone_array_2[0]
+        xw.Range(f'Q{index - 2}').value = zone_array_2[1]
+        xw.Range(f'R{index - 2}').value = zone_array_2[2]
+        xw.Range(f'S{index - 2}').value = zone_array_2[3]
+
+        xw.Range(f'P{index - 1}').value = zone_array_2[0]
+        xw.Range(f'Q{index - 1}').value = zone_array_2[1]
+        xw.Range(f'R{index - 1}').value = zone_array_2[2]
+        xw.Range(f'S{index - 1}').value = zone_array_2[3]
+
 
     if get_data_for_calc['Тип дерева'] == 1:
         # ПОЖАР
