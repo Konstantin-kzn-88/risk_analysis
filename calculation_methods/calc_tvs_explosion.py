@@ -155,7 +155,7 @@ class Explosion:
                                         energy_level)
 
         # Calculate classified_zone_array
-        classified_zone_array = [100, 70, 28, 14, 5, 2]  # CZA
+        classified_zone_array = [100, 70, 28, 14, 5, 3.5]  # CZA
         radius_CZA = []
         delta_p_array = res_list[1]
         radius_array = res_list[0]

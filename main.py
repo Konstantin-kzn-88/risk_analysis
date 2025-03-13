@@ -176,6 +176,29 @@ for index in all_index_of_type_tree:
         xw.Range(f'R{index - 1}').value = zone_array_2[2]
         xw.Range(f'S{index - 1}').value = zone_array_2[3]
 
+    if get_data_for_calc['Тип дерева'] == 14:
+        # ПОЖАР
+        # 1. Получить экземпляр класса пожара
+        fire_unit = calc_strait_fire.Strait_fire()
+        # 2. Получить зоны классифицированные
+        zone_array = fire_unit.termal_class_zone(get_data_for_calc['Площадь, м2'], 0.06, 100, 20, 1)
+        # 3. Запишем решение
+        xw.Range(f'P{index - 5}').value = zone_array[0]
+        xw.Range(f'Q{index - 5}').value = zone_array[1]
+        xw.Range(f'R{index - 5}').value = zone_array[2]
+        xw.Range(f'S{index - 5}').value = zone_array[3]
+        # ВЗРЫВ
+        # 1. Получим класс для расчета взрыва
+        explosion_unit = calc_tvs_explosion.Explosion()
+        # 2. Получим зоны классифицированные
+        zone_cls_array = explosion_unit.explosion_class_zone(3, DEGREE_OF_CLUTTER, xw.Range(f'J{index - 4}').value * 1000, 45320, 7, 2)
+        # 3. Запишем решение
+        xw.Range(f'T{index - 4}').value = zone_cls_array[1]
+        xw.Range(f'U{index - 4}').value = zone_cls_array[2]
+        xw.Range(f'V{index - 4}').value = zone_cls_array[3]
+        xw.Range(f'W{index - 4}').value = zone_cls_array[4]
+        xw.Range(f'X{index - 4}').value = zone_cls_array[5]
+
 
     if get_data_for_calc['Тип дерева'] == 1:
         # ПОЖАР

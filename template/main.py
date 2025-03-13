@@ -422,9 +422,7 @@ class Report:
         data = self.data_for_table
 
         result_list = []
-        # print(data)
         for item in data:
-            # print(item[1], item[7])
             devices = {'Sc': item[0],
                        'Unit': item[1],
                        'Sc_text': item[2],
