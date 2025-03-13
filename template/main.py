@@ -10,6 +10,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 INIQ_TEXT = str(int(time.time()))
+PATH_ = 'INTELPROEKT/'
 
 
 class FN_FG_chart:
@@ -183,7 +184,7 @@ class Report:
             print('Ошибка со страницами')
 
     def temp_explanatory_note(self):
-        doc = DocxTemplate(f'temp_rpz.docx')
+        doc = DocxTemplate(f'{PATH_}\\temp_rpz.docx')
         path_template = Path(__file__).parents[0]
         # создадим общий словарь для заполнения документа
         context = {}
@@ -246,7 +247,7 @@ class Report:
         doc.save(f'{path_template}\\add_docs\\RPZ_{INIQ_TEXT}.docx')
 
     def temp_declaration_note(self):
-        doc = DocxTemplate(f'temp_dpb.docx')
+        doc = DocxTemplate(f'{PATH_}\\temp_dpb.docx')
         path_template = Path(__file__).parents[0]
         # создадим общий словарь для заполнения документа
         context = {}
@@ -315,7 +316,7 @@ class Report:
         doc.save(f'{path_template}\\add_docs\\DPB_{INIQ_TEXT}.docx')
 
     def temp_info_note(self):
-        doc = DocxTemplate(f'temp_ifl.docx')
+        doc = DocxTemplate(f'{PATH_}\\temp_ifl.docx')
         path_template = Path(__file__).parents[0]
         # создадим общий словарь для заполнения документа
         context = {}
