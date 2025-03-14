@@ -4,14 +4,10 @@ from docxtpl import DocxTemplate, InlineImage
 from docx.shared import Mm
 import datetime
 from pathlib import Path
-import time
 import xlwings as xw
 import matplotlib.pyplot as plt
 import numpy as np
-from config import PATH_
-
-INIQ_TEXT = str(int(time.time()))
-
+from config import PATH_,INIQ_TEXT
 
 
 class FN_FG_chart:
