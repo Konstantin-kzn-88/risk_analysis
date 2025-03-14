@@ -8,9 +8,10 @@ import time
 import xlwings as xw
 import matplotlib.pyplot as plt
 import numpy as np
+from config import PATH_
 
 INIQ_TEXT = str(int(time.time()))
-PATH_ = 'INTELPROEKT/'
+
 
 
 class FN_FG_chart:
