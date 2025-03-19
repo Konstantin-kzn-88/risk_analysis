@@ -75,3 +75,8 @@ class Risk:
         # pp.pprint(components)
 
         return components
+
+
+if __name__ == '__main__':
+    components= Risk().risk_result()
+    pp.pprint(components)

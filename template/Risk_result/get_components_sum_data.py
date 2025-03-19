@@ -34,7 +34,7 @@ class Components_sum_data:
         for i in range(index-6, index+1):
             if xw.Range(f'H{i}').value is None:
                 break
-
+            # print(xw.Range(f'B{i}').value, xw.Range(f'AJ{i}').value)
             if int(xw.Range(f'AJ{i}').value) > scenario['Погибшие']:
                 scenario = {
                     'Оборудование': xw.Range(f'B{i}').value,
@@ -109,7 +109,7 @@ class Components_sum_data:
                 if dead_man > components[xw.Range(f'L{index}').value][0]['Погибшие']:
                     components[xw.Range(f'L{index}').value][0] = self.get_more_danger(index)
 
-                if dead_man > components[xw.Range(f'L{index}').value][1]['Вероятность']:
+                if probability > components[xw.Range(f'L{index}').value][1]['Вероятность']:
                     components[xw.Range(f'L{index}').value][1] = self.get_more_probability(index)
 
         # pp.pprint(components)
@@ -117,5 +117,7 @@ class Components_sum_data:
         return components
 
 
-
+if __name__ == '__main__':
+    components= Components_sum_data().components_result()
+    pp.pprint(components)
 

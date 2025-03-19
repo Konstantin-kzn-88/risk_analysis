@@ -111,19 +111,15 @@ class Report:
         # 1.4. Анализ риска (п.2.3.2 ДПБ)
         context['R1_min'] = "{:.2e}".format(min([i[7] for i in self.data_for_table]))
         context['R1_max'] = "{:.2e}".format(max([i[7] for i in self.data_for_table]))
-        context['R_koll_dead'] = "{:.2e}".format(sum([i[48] for i in self.data_for_table]))
+
 
         # диаграммы отрисованы temp_explanatory_note
         context['fn'] = InlineImage(doc, f'{path_template}\\fn.jpg', width=Mm(140))
         context['fg'] = InlineImage(doc, f'{path_template}\\fg.jpg', width=Mm(140))
         # 1.11. Выводы ДПБ (п.4.1. РПЗ)
+        # оставляем параметры риска децибелы общими для объекта
         most_possible = self.__get_most_possible_scenario()
-        context[
-            'most_possible'] = f'''сценарий: {most_possible[0]}, оборудование: {most_possible[1]}, частота {"{:.2e}".format(most_possible[7])} 1/год, ущерб: {round(most_possible[47], 2)} млн.руб.'''
         most_dangerous = self.__get_most_dangerous_scenario()
-        context[
-            'most_dangerous'] = f'''сценарий: {most_dangerous[0]}, оборудование: {most_dangerous[1]}, частота {"{:.2e}".format(most_dangerous[7])} 1/год, ущерб: {round(most_dangerous[47], 2)} млн.руб.'''
-
         context['probability_end'] = "{:.2e}".format(most_possible[7])
         context['damage_end'] = round(most_dangerous[47], 2)
         _temp = sum([i[48] for i in self.data_for_table]) / self.ws_DB.range("B23").value
@@ -148,17 +144,14 @@ class Report:
         context['fn'] = InlineImage(doc, f'{path_template}\\fn.jpg', width=Mm(140))
         context['fg'] = InlineImage(doc, f'{path_template}\\fg.jpg', width=Mm(140))
         # 1.2. Выводы ИФЛ
-        context['R_koll_dead'] = "{:.2e}".format(sum([i[48] for i in self.data_for_table]))
-        context['R_ind_dead'] = "{:.2e}".format(
-            sum([i[48] for i in self.data_for_table]) / self.ws_DB.range("B23").value)
+        data = get_risk_result.Risk().risk_result()
+        context['Risk'] = self.__get_risk_data_for_table(data)
+        data = get_components_sum_data.Components_sum_data().components_result()
+        context['Sum_data'] = self.__get_components_data_for_table(data)
 
+        # оставляем параметры риска децибелы общими для объекта
         most_possible = self.__get_most_possible_scenario()
-        context[
-            'most_possible'] = f'''сценарий: {most_possible[0]}, оборудование: {most_possible[1]}, частота {"{:.2e}".format(most_possible[7])} 1/год, ущерб: {round(most_possible[47], 2)} млн.руб.'''
         most_dangerous = self.__get_most_dangerous_scenario()
-        context[
-            'most_dangerous'] = f'''сценарий: {most_dangerous[0]}, оборудование: {most_dangerous[1]}, частота {"{:.2e}".format(most_dangerous[7])} 1/год, ущерб: {round(most_dangerous[47], 2)} млн.руб.'''
-
         context['probability_end'] = "{:.2e}".format(most_possible[7])
         context['damage_end'] = round(most_dangerous[47], 2)
         _temp = sum([i[48] for i in self.data_for_table]) / self.ws_DB.range("B23").value
@@ -186,6 +179,7 @@ class Report:
         result_list = []
         for item in data:
             if item[0] == None: break
+            # print('Pozition', item[1], ' Quantity', item[3])
             devices = {'Completion': item[15],
                        'Locations': item[0],
                        'Pozition': item[1],
@@ -387,4 +381,4 @@ class Report:
 if __name__ == '__main__':
     Report().temp_explanatory_note()
     Report().temp_declaration_note()
-    # Report().temp_info_note()
+    Report().temp_info_note()
