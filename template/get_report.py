@@ -33,7 +33,7 @@ class Report:
     def temp_explanatory_note(self):
         doc = DocxTemplate(f'{PATH_}\\temp_rpz.docx')
         path_template = Path(__file__).parents[0]
-        # создадим общий словарь для заполнения документа
+        # создадим общий  словарь для заполнения документа
         context = {}
         # 1. данные для словаря
         context['year'] = datetime.date.today().year
