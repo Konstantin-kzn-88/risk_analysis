@@ -63,16 +63,19 @@ class Report:
         context['R1_min'] = "{:.2e}".format(min([i[7] for i in self.data_for_table]))
         context['R1_max'] = "{:.2e}".format(max([i[7] for i in self.data_for_table]))
         # НОВЫЙ РЕЗУЛЬТАТ РИСКА
-        data = get_risk_result.Risk().risk_result()
-        context['Risk'] = self.__get_risk_data_for_table(data)
-
         self.__get_fn_fg_chart()
         context['fn'] = InlineImage(doc, f'{path_template}\\fn.jpg', width=Mm(140))
         context['fg'] = InlineImage(doc, f'{path_template}\\fg.jpg', width=Mm(140))
 
         # 1.11. Выводы РПЗ (п.2.3. РПЗ) NEW!
+        data = get_risk_result.Risk().risk_result()
+        context['Risk'] = self.__get_risk_data_for_table(data)
         data = get_components_sum_data.Components_sum_data().components_result()
         context['Sum_data'] = self.__get_components_data_for_table(data)
+
+        # 1.4. Анализ риска (п.2.3.2 ДПБ)
+        context['R1_min'] = "{:.2e}".format(min([i[7] for i in self.data_for_table]))
+        context['R1_max'] = "{:.2e}".format(max([i[7] for i in self.data_for_table]))
 
         # оставляем параметры риска децибелы общими для объекта
         most_possible = self.__get_most_possible_scenario()
@@ -148,6 +151,10 @@ class Report:
         context['Risk'] = self.__get_risk_data_for_table(data)
         data = get_components_sum_data.Components_sum_data().components_result()
         context['Sum_data'] = self.__get_components_data_for_table(data)
+
+        # 1.4. Анализ риска (п.2.3.2 ДПБ)
+        context['R1_min'] = "{:.2e}".format(min([i[7] for i in self.data_for_table]))
+        context['R1_max'] = "{:.2e}".format(max([i[7] for i in self.data_for_table]))
 
         # оставляем параметры риска децибелы общими для объекта
         most_possible = self.__get_most_possible_scenario()
