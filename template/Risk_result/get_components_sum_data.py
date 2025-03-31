@@ -31,7 +31,7 @@ class Components_sum_data:
             'Ущерб': xw.Range(f'AV{index-6}').value,
         }
 
-        for i in range(index-6, index+1):
+        for i in range(index-6, index+2):
             if xw.Range(f'H{i}').value is None:
                 break
             # print(xw.Range(f'B{i}').value, xw.Range(f'AJ{i}').value)
@@ -64,9 +64,10 @@ class Components_sum_data:
             'Ущерб экол.': xw.Range(f'AU{index-6}').value,
             'Ущерб': xw.Range(f'AV{index-6}').value,
         }
-        for i in range(index-6, index+1):
+        for i in range(index-6, index+2):
             if xw.Range(f'H{i}').value is None:
                 break
+            # print(xw.Range(f'B{i}').value, xw.Range(f'H{i}').value)
 
             if float(xw.Range(f'H{i}').value) > scenario['Вероятность']:
                 scenario = {
