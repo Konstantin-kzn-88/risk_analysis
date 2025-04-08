@@ -8,18 +8,18 @@ class FN_FG_chart:
     Класс построения F/N  и  F/G диаграмм.
 
     Для построения диграммы должен быть открыт файл
-    1) risk_analysis_prototype.xlsx
+    1) del.xlsx
     2) на листе "FN_FG" заполненны таблицы значений
 
     '''
 
     def __init__(self):
         try:
-            wb = xw.Book('risk_analysis_prototype.xlsx')
+            wb = xw.Book('del.xlsx')
             self.ws = wb.sheets['FN_FG']
 
         except FileNotFoundError:
-            print('Файл не открыт risk_analysis_prototype.xlsx')
+            print('Файл не открыт del.xlsx')
 
     def _sum_data_for_fn(self, data: list):
         '''
