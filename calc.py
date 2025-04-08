@@ -239,6 +239,42 @@ for index in all_index_of_type_tree:
         xw.Range(f'AA{index - 1}').value = zone_lclp[0]
         xw.Range(f'AB{index - 1}').value = zone_lclp[1]
 
+
+    if get_data_for_calc['Тип дерева'] == 25:
+        # ПОЖАР
+        # 1. Получить экземпляр класса пожара
+        fire_unit = calc_strait_fire.Strait_fire()
+        # 2. Получить зоны классифицированные
+        zone_array = fire_unit.termal_class_zone(get_data_for_calc['Площадь, м2'], 0.06, 100, 20, 1)
+        zone_array_2 = fire_unit.termal_class_zone(get_data_for_calc['Площадь, м2'] / 10, 0.06, 100, 20, 1)
+        # 3. Запишем решение
+        xw.Range(f'P{index - 5}').value = zone_array[0]
+        xw.Range(f'Q{index - 5}').value = zone_array[1]
+        xw.Range(f'R{index - 5}').value = zone_array[2]
+        xw.Range(f'S{index - 5}').value = zone_array[3]
+
+        xw.Range(f'P{index - 2}').value = zone_array_2[0]
+        xw.Range(f'Q{index - 2}').value = zone_array_2[1]
+        xw.Range(f'R{index - 2}').value = zone_array_2[2]
+        xw.Range(f'S{index - 2}').value = zone_array_2[3]
+
+        # ПОЖАР-ВСПЫШКА
+        # 1. Получим класс для расчета
+        lclp_unit = calc_lower_concentration.LCLP()
+        lclp_unit_2 = calc_lower_concentration.LCLP()
+        # 2. Получим зоны
+        zone_lclp = lclp_unit.lower_concentration_limit(xw.Range(f'J{index - 1}').value * 1000, 100, 30,
+                                                        get_data_for_calc['НКПР, об.%'])
+        zone_lclp_2 = lclp_unit.lower_concentration_limit(xw.Range(f'J{index - 4}').value * 1000, 100, 30,
+                                                        get_data_for_calc['НКПР, об.%'])
+        # 3. Запишем решение
+        xw.Range(f'AA{index - 1}').value = zone_lclp[0]
+        xw.Range(f'AB{index - 1}').value = zone_lclp[1]
+
+        xw.Range(f'AA{index - 4}').value = zone_lclp_2[0]
+        xw.Range(f'AB{index - 4}').value = zone_lclp_2[1]
+
+
     if get_data_for_calc['Тип дерева'] == 4:
         # ФАКЕЛ
         # 1. Получим класс для расчета
