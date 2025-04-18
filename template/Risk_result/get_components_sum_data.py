@@ -21,7 +21,7 @@ class Components_sum_data:
     def get_more_danger(self, index):
         scenario = {
             'Оборудование': xw.Range(f'B{index-6}').value,
-            'Сценарий': xw.Range(f'D{index-6}').value,
+            'Сценарий': xw.Range(f'C{index-6}').value,
             'Номер сценария': xw.Range(f'A{index - 6}').value,
             'Количество в аварии': xw.Range(f'I{index-6}').value,
             'Вероятность': xw.Range(f'H{index-6}').value,
@@ -38,7 +38,7 @@ class Components_sum_data:
             if int(xw.Range(f'AJ{i}').value) > scenario['Погибшие']:
                 scenario = {
                     'Оборудование': xw.Range(f'B{i}').value,
-                    'Сценарий': xw.Range(f'D{i}').value,
+                    'Сценарий': xw.Range(f'C{i}').value,
                     'Номер сценария': xw.Range(f'A{i}').value,
                     'Количество в аварии': xw.Range(f'I{i}').value,
                     'Вероятность': xw.Range(f'H{i}').value,
@@ -55,7 +55,7 @@ class Components_sum_data:
     def get_more_probability(self, index):
         scenario = {
             'Оборудование': xw.Range(f'B{index-6}').value,
-            'Сценарий': xw.Range(f'D{index-6}').value,
+            'Сценарий': xw.Range(f'C{index-6}').value,
             'Номер сценария': xw.Range(f'A{index-6}').value,
             'Количество в аварии': xw.Range(f'I{index-6}').value,
             'Вероятность': xw.Range(f'H{index-6}').value,
@@ -72,7 +72,7 @@ class Components_sum_data:
             if float(xw.Range(f'H{i}').value) > scenario['Вероятность']:
                 scenario = {
                     'Оборудование': xw.Range(f'B{i}').value,
-                    'Сценарий': xw.Range(f'D{i}').value,
+                    'Сценарий': xw.Range(f'C{i}').value,
                     'Номер сценария': xw.Range(f'A{i}').value,
                     'Количество в аварии': xw.Range(f'I{i}').value,
                     'Вероятность': xw.Range(f'H{i}').value,
