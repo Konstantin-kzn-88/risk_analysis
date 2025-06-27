@@ -1,6 +1,6 @@
 import time
 
-DEGREE_OF_CLUTTER = 3 #степень загроможденности
+DEGREE_OF_CLUTTER = 4 #степень загроможденности
 PATH_ = 'BASHNEFT/'
 # PATH_ = 'TATNEFT/'
 # PATH_ = 'NPF/'

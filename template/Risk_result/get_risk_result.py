@@ -29,8 +29,8 @@ class Risk:
             'Максимальный экологический ущерб': max(
                 cell.value for cell in self.ws.range(f'AU{index - 6}:AU{index + 2}') if cell.value is not None),
         }
+        # print(sum_risk)
         return sum_risk
-
 
     def risk_result(self):
         # сгенерируем все индексы в которых могут находится составляющие
@@ -48,21 +48,21 @@ class Risk:
             else:
                 risk = self.get_sum_risk(index)
 
+                components[xw.Range(f'L{index}').value]['Коллективный риск гибели'] = \
+                components[xw.Range(f'L{index}').value]['Коллективный риск гибели'] + risk['Коллективный риск гибели']
 
-                components[xw.Range(f'L{index}').value]['Коллективный риск гибели'] = components[xw.Range(f'L{index}').value][
-                                                                                          'Коллективный риск гибели'] + risk[
-                                                                                          'Коллективный риск гибели']
-                components[xw.Range(f'L{index}').value]['Коллективный риск ранения'] = components[xw.Range(f'L{index}').value][
-                                                                                           'Коллективный риск ранения'] + risk[
-                                                                                           'Коллективный риск ранения']
-                components[xw.Range(f'L{index}').value]['Индивидуальный риск гибели'] = components[xw.Range(f'L{index}').value][
-                                                                                            'Индивидуальный риск гибели'] + \
-                                                                                        risk[
-                                                                                            'Индивидуальный риск гибели']
-                components[xw.Range(f'L{index}').value]['Индивидуальный риск гибели'] = components[xw.Range(f'L{index}').value][
-                                                                                            'Индивидуальный риск гибели'] + \
-                                                                                        risk[
-                                                                                            'Индивидуальный риск гибели']
+                components[xw.Range(f'L{index}').value]['Коллективный риск ранения'] = \
+                components[xw.Range(f'L{index}').value]['Коллективный риск ранения'] + risk['Коллективный риск ранения']
+
+                components[xw.Range(f'L{index}').value]['Индивидуальный риск гибели'] = \
+                components[xw.Range(f'L{index}').value]['Индивидуальный риск гибели'] + risk[
+                    'Индивидуальный риск гибели']
+
+                # Исправлено: должно быть "Индивидуальный риск ранения"
+                components[xw.Range(f'L{index}').value]['Индивидуальный риск ранения'] = \
+                components[xw.Range(f'L{index}').value]['Индивидуальный риск ранения'] + risk[
+                    'Индивидуальный риск ранения']
+
                 components[xw.Range(f'L{index}').value]['Максимальный суммарный ущерб'] = max(
                     components[xw.Range(f'L{index}').value]['Максимальный суммарный ущерб'],
                     risk['Максимальный суммарный ущерб'])
@@ -70,9 +70,6 @@ class Risk:
                 components[xw.Range(f'L{index}').value]['Максимальный экологический ущерб'] = max(
                     components[xw.Range(f'L{index}').value]['Максимальный экологический ущерб'],
                     risk['Максимальный экологический ущерб'])
-
-
-        # pp.pprint(components)
 
         return components
 
