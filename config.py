@@ -1,7 +1,8 @@
 import time
 
-DEGREE_OF_CLUTTER = 4 #степень загроможденности
+DEGREE_OF_CLUTTER = 3 #степень загроможденности
 PATH_ = 'BASHNEFT/'
+# PATH_ = 'SHESHMAOIL/'
 # PATH_ = 'TATNEFT/'
 # PATH_ = 'NPF/'
 # PATH_ = 'VECTORSTROY/'
